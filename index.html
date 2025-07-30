@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UG Billing Software</title>
+    <style>body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+    }
+    .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px #ccc;
+        width: 100%;
+    }
+    .business-header {
+        text-align: center;
+        margin-bottom: 18px;
+    }
+    .business-header h1 {
+        margin-bottom: 4px;
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+    .business-contact {
+        font-size: 1rem;
+        color: #333;
+        margin-bottom: 4px;
+    }
+    .business-logo {
+        font-size: 2.2rem;
+        text-align: center;
+        margin-bottom: 2px;
+        line-height: 1;
+    }
+    h1, h2, h3 {
+        text-align: center;
+    }
+    .section {
+        margin-bottom: 20px;
+    }
+    .section h2 {
+        font-size: 1rem;
+        margin-bottom: 8px;
+        margin-top: 0;
+        font-weight: 600;
+    }
+    label {
+        margin-right: 8px;
+    }
+    input[type="text"], input[type="number"] {
+        margin-right: 10px;
+        padding: 4px 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+    button {
+        padding: 6px 16px;
+        background: #4a90e2;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    button:hover {
+        background: #357ab8;
+    }
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        min-width: 400px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        font-size: 1rem;
+    }
+    th {
+        background: #f0f0f0;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 700px) {
+        .container {
+            max-width: 98vw;
+            padding: 8px;
+            margin: 8px auto;
+            border-radius: 6px;
+        }
+        .receipt-header, .business-title, .business-address, .business-contact, .receipt-title, .receipt-info, .receipt-customer, .receipt-summary, .thanks-message {
+            font-size: 0.97rem;
+        }
+        .business-title {
+            font-size: 1.05rem;
+        }
+        .business-logo {
+            font-size: 1.3rem;
+        }
+        .summary-row, .total-row {
+            font-size: 0.97rem;
+        }
+        #invoiceTable th, #invoiceTable td {
+            font-size: 0.95rem;
+            padding: 4px 1px;
+        }
+        .input-section input, .input-section button {
+            font-size: 0.95rem;
+            padding: 4px 8px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        #invoiceTable {
+            min-width: 320px;
+        }
+    }
+    @media (max-width: 480px) {
+        .container {
+            max-width: 100vw;
+            padding: 2px;
+            margin: 0;
+            border-radius: 0;
+        }
+        .receipt-header, .business-title, .business-address, .business-contact, .receipt-title, .receipt-info, .receipt-customer, .receipt-summary, .thanks-message {
+            font-size: 0.92rem;
+        }
+        .business-title {
+            font-size: 0.95rem;
+        }
+        .business-logo {
+            font-size: 1.1rem;
+        }
+        .summary-row, .total-row {
+            font-size: 0.92rem;
+        }
+        #invoiceTable th, #invoiceTable td {
+            font-size: 0.9rem;
+            padding: 3px 1px;
+        }
+        .input-section input, .input-section button {
+            font-size: 0.9rem;
+            padding: 3px 6px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        #invoiceTable {
+            min-width: 250px;
+        }
+    }
+    
+    /* Thermal printer optimized print layout (80mm paper) */
+    @media print {
+        body {
+            background: #fff !important;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            box-shadow: none !important;
+            border: none !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            max-width: 300px !important; /* 80mm paper */
+            width: 100% !important;
+            background: #fff !important;
+            border-radius: 0 !important;
+        }
+        .business-header {
+            text-align: center !important;
+            margin-bottom: 8px !important;
+            width: 100%;
+        }
+        .business-logo {
+            font-size: 1.5rem !important;
+            margin-bottom: 1px !important;
+            text-align: center !important;
+            line-height: 1 !important;
+        }
+        .business-header h1 {
+            font-size: 1.1rem !important;
+            margin-bottom: 0 !important;
+        }
+        .business-contact {
+            display: block !important;
+            font-size: 0.9rem !important;
+            color: #111 !important;
+            margin-bottom: 2px !important;
+            width: 100%;
+            text-align: center !important;
+        }
+        .remove-col, .remove-col ~ td, .remove-col ~ th, td:last-child, th.remove-col {
+            display: none !important;
+        }
+        button, input, label {
+            display: none !important;
+        }
+        #displayCustomer {
+            font-weight: bold;
+            color: #111 !important;
+        }
+    }
+    
+    .receipt-header {
+        text-align: center;
+        margin-bottom: 8px;
+    }
+    .business-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+        margin-bottom: 2px;
+    }
+    .business-address, .business-contact {
+        font-size: 0.95rem;
+        margin-bottom: 1px;
+    }
+    .receipt-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+        margin-top: 2px;
+    }
+    .receipt-info {
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+        text-align: left;
+        border-bottom: 1px dashed #333;
+        padding-bottom: 2px;
+    }
+    .receipt-info > div {
+        margin-bottom: 1px;
+    }
+    .receipt-customer {
+        font-size: 1rem;
+        margin-bottom: 4px;
+        text-align: left;
+        font-weight: bold;
+    }
+    #invoiceTable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 4px;
+        font-size: 0.98rem;
+        min-width: 220px;
+    }
+    #invoiceTable th, #invoiceTable td {
+        border-bottom: 1px dotted #333;
+        padding: 4px 2px;
+        text-align: center;
+    }
+    #invoiceTable th {
+        font-size: 1rem;
+        font-weight: bold;
+        background: none;
+        border-top: 1px solid #333;
+        border-bottom: 1px solid #333;
+    }
+    #invoiceTable .remove-col {
+        width: 40px;
+    }
+    .receipt-summary {
+        margin-top: 6px;
+        border-top: 1px dashed #333;
+        border-bottom: 1px dashed #333;
+        padding: 4px 0;
+    }
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+        margin-bottom: 2px;
+    }
+    .total-row {
+        font-weight: bold;
+        font-size: 1.08rem;
+        border-top: 1px solid #333;
+        border-bottom: 1px solid #333;
+        padding: 2px 0;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+    .receipt-footer {
+        text-align: right;
+        font-size: 0.9rem;
+        margin-top: 6px;
+        margin-bottom: 8px;
+    }
+    .input-section {
+        margin-top: 16px;
+    }
+    @media print {
+        .input-section {
+            display: none !important;
+        }
+        .container {
+            max-width: 300px !important;
+            width: 100% !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: #fff !important;
+        }
+        .receipt-header, .business-title, .business-address, .business-contact, .receipt-title, .receipt-info, .receipt-customer, .receipt-summary, .receipt-footer {
+            text-align: center !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+        #invoiceTable th, #invoiceTable td {
+            font-size: 0.95rem !important;
+            padding: 2px 1px !important;
+        }
+        .summary-row, .total-row {
+            font-size: 0.95rem !important;
+        }
+    }
+    
+    .thanks-message {
+        text-align: center;
+        font-size: 1.05rem;
+        font-weight: 500;
+        margin: 10px 0 4px 0;
+        color: #222;
+    }
+    @media print {
+        .thanks-message {
+            text-align: center !important;
+            font-size: 1rem !important;
+            font-weight: 500 !important;
+            margin: 8px 0 2px 0 !important;
+            color: #111 !important;
+        }
+    }</style>
+</head>
+<body>
+    <div class="container">
+        <div class="receipt-header">
+            <div class="business-logo">📚</div>
+            <div class="business-title">AKRAM BOOK DEPOT</div>
+            <div class="business-address">Main Bazaar Raiwind</div>
+            <div class="business-contact">Contact: 03364626364</div>
+        </div>
+        <div class="receipt-title">UG Billing</div>
+        <div class="receipt-info">
+            <div>Date: <span id="receiptDate"></span></div>
+            <div>Time: <span id="receiptTime"></span></div>
+        </div>
+        <div class="receipt-customer">
+            <strong>Customer:</strong> <span id="displayCustomer">-</span>
+        </div>
+        <div class="table-responsive">  
+            <table id="invoiceTable">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Amt</th>
+                        <th class="remove-col">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Items go here -->
+                </tbody>
+            </table>
+        </div>
+        <div class="receipt-summary">
+            <div class="summary-row total-row">
+                <span>TOTAL</span>
+                <span id="grandTotal">0.00</span>
+            </div>
+        </div>
+        <div class="thanks-message">Thanks for purchasing!</div>
+        <div class="input-section">
+            <div class="section">
+                <label>Customer Name:</label>
+                <input type="text" id="customerName" placeholder="Enter customer name">
+            </div>
+            <div class="section">
+                <label>Product Name:</label>
+                <input type="text" id="productName" placeholder="Product">
+                <label>Quantity:</label>
+                <input type="number" id="productQty" min="1" value="1">
+                <label>Price:</label>
+                <input type="number" id="productPrice" min="0" value="0">
+                <button onclick="addProduct()">Add</button>
+            </div>
+            <div class="section">
+                <button onclick="printInvoice()">Print Invoice</button>
+                <button onclick="printToBluetooth()" class="btn-bluetooth">📱 Bluetooth Print</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let items = [];
+
+function addProduct() {
+    const name = document.getElementById('productName').value.trim();
+    const qty = parseInt(document.getElementById('productQty').value);
+    const price = parseFloat(document.getElementById('productPrice').value);
+
+    if (!name || qty <= 0 || price < 0) {
+        alert('Please enter valid product details.');
+        return;
+    }
+
+    items.push({ name, qty, price });
+    document.getElementById('productName').value = '';
+    document.getElementById('productQty').value = 1;
+    document.getElementById('productPrice').value = 0;
+    updateTable();
+}
+
+function removeProduct(index) {
+    items.splice(index, 1);
+    updateTable();
+}
+
+function updateTable() {
+    const tbody = document.querySelector('#invoiceTable tbody');
+    tbody.innerHTML = '';
+    let total = 0;
+    items.forEach((item, idx) => {
+        const row = document.createElement('tr');
+        const itemTotal = item.qty * item.price;
+        total += itemTotal;
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.qty}</td>
+            <td>$${item.price.toFixed(2)}</td>
+            <td><button onclick="removeProduct(${idx})">Remove</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+    document.getElementById('grandTotal').textContent = total.toFixed(2);
+    document.getElementById('displayCustomer').textContent = document.getElementById('customerName').value || '-';
+}
+
+document.getElementById('customerName').addEventListener('input', function() {
+    document.getElementById('displayCustomer').textContent = this.value || '-';
+});
+
+function setDateTime() {
+    const now = new Date();
+    document.getElementById('receiptDate').textContent = now.toLocaleDateString();
+    document.getElementById('receiptTime').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+setDateTime();
+
+function printInvoice() {
+    if (items.length === 0) {
+        alert('Add at least one product.');
+        return;
+    }
+    setDateTime(); // Update date/time before printing
+    window.print();
+}
+    </script>
+</body>
+</html>
